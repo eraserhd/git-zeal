@@ -33,6 +33,19 @@ git-zeal \- Zealously run your tests (on every commit)
 \fIgit zeal\fR show\-build\-result [\-\-vars|\-\-log] [\-\-shell] <commit>
 .fi
 .sp
+.SH "DESCRIPTION"
+Zeal runs your long-running tests on your git repo to save you the
+embarrasment of pushing broken commits\&.  You can merrily make small,
+focused commits - ones which you are decently confident about - and the full
+build and tests "catch up" while you are working\&.  A good way to use this
+is to test your individual commits by running selected tests for that
+module\&.
+.sp
+Zeal tests the tips of all branches to make sure you are stay green\&. When
+you break a branch, zeal effectively bisects the branch to locate the
+offending commit\&. See the
+\fBnext\fR
+command for a more detailed description of the algorithm.
 .SH "COMMANDS"
 .PP
 status
@@ -45,8 +58,12 @@ indicate it was bad, and "??" to indicate we don\(cqt know the result yet\&.
 .PP
 build <commit>
 .RS 4
-Checks out a detached worktree, runs zeal.build-command, records the build
-result, and cleans up\&.
+Checks out a detached worktree, runs
+\fBzeal\&.build\-command\fR, records the build result, and cleans up\&.
+.sp
+\fBbuild\fR
+exits with the build command\(cqs exit status (unless it failed to get
+that far)\&.
 .RE
 .PP
 run

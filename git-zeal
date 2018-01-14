@@ -213,7 +213,7 @@ function zeal_build()
     "$object" || return $?
 
   rm -rf "$build_dir" "$build_log"
-  return $?
+  return $build_exit
 }
 
 function zeal_next()
