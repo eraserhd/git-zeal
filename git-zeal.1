@@ -1,0 +1,86 @@
+'\" t
+.TH "GIT\-ZEAL" "1" LOCAL
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+git-zeal \- Zealously run your tests (on every commit)
+.SH "SYNOPSIS"
+.sp
+.nf
+\fIgit zeal\fR status
+\fIgit zeal\fR build [<commit>]
+\fIgit zeal\fR run
+\fIgit zeal\fR next
+\fIgit zeal\fR clear-build-result <commit>
+\fIgit zeal\fR set-build-result [\-\-exit <exit\-code>] [\-\-log <build-log>] <commit>
+\fIgit zeal\fR show-build-status [\-\-vars] [\-\-log] [\-\-shell] <commit>
+.fi
+.sp
+.SH "COMMANDS"
+.PP
+status
+.RS 4
+Prints the status of all local branches.  Tries to go back to the last good
+commit, but won't go back further than 10 commits. Each line has a status in
+square brackets, which is "OK" to indicate the build was good, "XX" to
+indicate it was bad, and "??" to indicate we don't know the result yet.
+.RE
+.PP
+build <commit>
+.RS 4
+Checks out a detached worktree, runs zeal.build-command, records the build
+result, and cleans up.
+.RE
+.PP
+run
+.RS 4
+Polls for new commits and builds them smartly (see `next' for a description on
+how this works).  Clears the screen and displays the results of `git zeal
+status` while building and polling.
+.RE
+.PP
+next
+.RS 4
+Print the next best commit to test.  Newer commits are prioritized over older
+commits, and branch tips are prioritized over deeper commits.  Zeal assumes
+that we don't care about the result of deeper commits if we have shallower
+commits which are OK. If the branch is broken, the next commit is effectively
+the commit which would bisect the branch to isolate the broken commit.
+.RE
+.PP
+clear-build-reult <commit>
+.RS 4
+Remove data about the result of building <commit>.
+.RE
+.PP
+set-build-result [-e|--exit <exit-code>] [-l|--log <build-log>] [-v|--variable <varname>=<value>] <commit>
+.RS 4
+Record a build result for use by `next' and `status'.
+.RE
+.PP
+show-build-result [--vars|--log] [--var-prefix=<prefix>] [--shell] <commit>
+.RS 4
+Show the recorded result of a build.  If --vars is supplied, print only the
+variables (including the exit code).  If --log is supplied, show only the
+build log.  If neither is supplied, show the variables, a blank line, then
+the build log.
+
+If --shell is provided, escape the variables for evaluation by the shell. If
+<prefix> is supplied, prepend it to the variable names.
