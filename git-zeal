@@ -162,17 +162,22 @@ function zeal_status()
   while read refname; do
     printf ' %s\n' "$refname"
     for commit in $(find_commits "$refname"); do
+      local -i zeal_build_var_start=-1
       local -i zeal_build_var_exit=-1
       eval "$(zeal_show_build_result --vars --var-prefix=zeal_build_var_ --shell "$commit")"
       local status
       if (( zeal_build_var_exit == -1 )); then
-        status='??'
+        if (( zeal_build_var_start != -1 )); then
+          status='**'
+        else
+          status='__'
+        fi
       elif (( zeal_build_var_exit == 0 )); then
         status='OK'
       else
         status='XX'
       fi
-      printf '   [%2s] %s %s\n' \
+      printf '   %2s %s %s\n' \
         "$status" \
         "$(git rev-parse --short "$commit")" \
         "$(git log -1 --pretty=%s "$commit")"

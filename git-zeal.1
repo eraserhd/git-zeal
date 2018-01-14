@@ -51,9 +51,16 @@ command for a more detailed description of the algorithm.
 status
 .RS 4
 Prints the status of all local branches\&. Tries to go back to the last good
-commit, but won\(cqt go back further than 10 commits. Each line has a status in
-square brackets, which is "OK" to indicate the build was good, "XX" to
-indicate it was bad, and "??" to indicate we don\(cqt know the result yet\&.
+commit, but won\(cqt go back further than 10 commits\&. Each commit is shown
+with a status of
+\fB__\fR
+(build not attempted),
+\fBOK\fR
+(build succeeded),
+\fBXX\fR
+(build failed),
+\fB**\fR
+(build in progress)\&.
 .RE
 .PP
 build <commit>
