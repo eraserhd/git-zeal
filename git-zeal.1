@@ -88,6 +88,9 @@ that we don\(cqt care about the result of deeper commits if we have shallower
 commits which are OK\&. If the branch is broken, the next commit is
 effectively the commit which would bisect the branch to isolate the broken
 commit\&.
+.sp
+If the commit which would be the next is currently being built, it is
+skipped\&.
 .RE
 .PP
 clear\-build\-reult <commit>
