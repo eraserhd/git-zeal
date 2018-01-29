@@ -12,7 +12,7 @@ function zeal_notes()
 function zeal_clear_build_result()
 {
   local object="$1"
-  zeal_notes remove --ignore-missing "$object"
+  zeal_notes remove --ignore-missing "${object}^{tree}"
   return $?
 }
 
@@ -63,7 +63,7 @@ function zeal_set_build_result()
     done
     printf '\n'
     cat "$build_log"
-  ) | zeal_notes add -f -F- "$object"
+  ) | zeal_notes add -f -F- "${object}^{tree}"
   return $?
 }
 
@@ -127,7 +127,7 @@ function zeal_show_build_result()
     log)  sed_exprs+=( '-e' '1,/^$/d' );;
   esac
 
-  zeal_notes show "$object" | sed "${sed_exprs[@]}"
+  zeal_notes show "${object}^{tree}" | sed "${sed_exprs[@]}"
   return $?
 }
 
