@@ -174,12 +174,37 @@ function find_commits()
 
 function zeal_status()
 {
+  local starting_build
+  while [[ $# -ne 0 ]]; do
+    case "$1" in
+      --starting-build=*)
+        starting_build="${1#--starting-build=}"
+        ;;
+      *)
+        printf 'git zeal status: unknown option %s.\n' "$1" >&2
+        return 1
+        ;;
+    esac
+    shift
+  done
+
+  if [[ -n $starting_build ]]; then
+    starting_build=$(git rev-parse "${starting_build}^{tree}")
+  fi
+
   git for-each-ref --format='%(refname:short)' refs/heads/ | \
   while read refname; do
     printf ' %s\n' "$refname"
     for commit in $(find_commits "$refname"); do
+      local status
+      if [[ $starting_build = $(git rev-parse "${commit}^{tree}") ]]; then
+        status='**'
+      else
+        status=$(commit_status "$commit")
+      fi
+
       printf '   %2s %s %s\n' \
-        "$(commit_status "$commit")" \
+        "$status" \
         "$(git rev-parse --short "$commit")" \
         "$(git log -1 --pretty=%s "$commit")"
     done
@@ -333,13 +358,14 @@ function zeal_run()
 {
   while true; do
     clear
-    zeal_status
     local commit=$(zeal_next)
     if [[ -z $commit ]]; then
+      zeal_status
       sleep 30
       continue
+    else
+      zeal_status --starting-build="$commit"
     fi
-    printf '\n (building %s)\n' "$commit"
     zeal_build "$commit" >/dev/null 2>&1
   done
 }
