@@ -224,8 +224,8 @@ function zeal_build()
   local -i start=$(date +%s)
   zeal_set_build_result -v start=$start "$object"
 
-  local build_dir=$(mktemp -d -t zeal)
-  local build_log=$(mktemp -t zeal-log)
+  local build_dir=$(mktemp -d -t zeal.XXXXXXXXXX)
+  local build_log=$(mktemp -t zeal-log.XXXXXXXXXX)
   git worktree add -f --detach "$build_dir" "$object" || return $?
 
   pushd "$build_dir" || return $?
