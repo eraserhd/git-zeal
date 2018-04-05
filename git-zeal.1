@@ -28,7 +28,7 @@ git-zeal \- Zealously run your tests (on every commit)
 \fIgit zeal\fR build [<commit>]
 \fIgit zeal\fR run
 \fIgit zeal\fR next
-\fIgit zeal\fR clear\-build\-result <commit>
+\fIgit zeal\fR clear\-build\-result [<commit>|--all]
 \fIgit zeal\fR set\-build\-result [\-\-exit <exit\-code>] [\-\-log <build-log>] <commit>
 \fIgit zeal\fR show\-build\-result [\-\-vars|\-\-log] [\-\-shell] <commit>
 .fi
@@ -93,9 +93,10 @@ If the commit which would be the next is currently being built, it is
 skipped\&.
 .RE
 .PP
-clear\-build\-result <commit>
+clear\-build\-result [<commit>|\-\-all]
 .RS 4
-Remove data about the result of building <commit>\&.
+Remove data about the result of building <commit>, or data for all build results
+in the current repo if \-\-all is supplied.\&.
 .RE
 .PP
 set\-build\-result [\-e|\-\-exit <exit\-code>] [\-l|\-\-log <build\-log>] [\-v|\-\-variable <varname>=<value>] <commit>
