@@ -3,17 +3,23 @@
 ##############################################################################
 # Build Results
 
+ZEAL_NOTES_REF=refs/notes/zeal
+
 function zeal_notes()
 {
-  git notes --ref refs/notes/zeal "$@" 2>/dev/null
+  git notes --ref $ZEAL_NOTES_REF "$@" 2>/dev/null
   return $?
 }
 
 function zeal_clear_build_result()
 {
-  local object="$1"
-  zeal_notes remove --ignore-missing "${object}^{tree}"
-  return $?
+  if [[ "$1" == "--all" ]]; then
+    git update-ref -d $ZEAL_NOTES_REF
+  else
+    local object="$1"
+    zeal_notes remove --ignore-missing "${object}^{tree}"
+    return $?
+  fi
 }
 
 function zeal_set_build_result()
