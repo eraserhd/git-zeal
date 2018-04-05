@@ -231,7 +231,7 @@ function zeal_build()
   pushd "$build_dir" || return $?
 
   trap "zeal_clear_build_result ${object}; exit 130" SIGINT
-  ( $SHELL -c "$build_command" ) |tee "$build_log"
+  ( $SHELL -c "$build_command" ) 2>&1 |tee "$build_log"
   local -i build_exit=${PIPESTATUS[0]}
   trap - SIGINT
 
